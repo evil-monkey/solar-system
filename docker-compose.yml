@@ -1,0 +1,11 @@
+tomcat:
+  build: .
+  dockerfile: Dockerfile
+  ports:
+   - "8083:8080"
+   - "8003:8000"
+  volumes:
+   - .:/code
+  working_dir: /usr/local/tomcat
+  entrypoint: /code/docker-tools/entrypoint.sh
+  restart: always

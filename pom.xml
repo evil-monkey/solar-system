@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.solarsystem</groupId>
+	<artifactId>wheater-predictor</artifactId>
+	<packaging>pom</packaging>
+	<version>0.0.1</version>
+	<name>Weater Predictor</name>
+
+	<modules>
+		<module>api</module>
+		<module>service</module>
+	</modules>
+
+	<properties>
+		<deps.project.version>0.0.1</deps.project.version>
+		<properties.java.version>1.8</properties.java.version>
+
+		<deps.jackson.version>2.7.3</deps.jackson.version>
+		<deps.jax-rs-api.version>2.0.1</deps.jax-rs-api.version>
+		<deps.jersey.version>2.23.2</deps.jersey.version>
+		<deps.junit.version>4.12</deps.junit.version>
+		<deps.logback.verison>1.1.6</deps.logback.verison>
+		<deps.mockito.version>1.10.8</deps.mockito.version>
+		<deps.slf4j.version>1.7.19</deps.slf4j.version>
+		<deps.spring.version>4.2.5.RELEASE</deps.spring.version>
+		<deps.swagger.version>1.5.10</deps.swagger.version>
+		<plugins.enforcer.version>1.3.1</plugins.enforcer.version>
+		<plugins.jacoco.version>0.7.7.201606060606</plugins.jacoco.version>
+		<plugins.jetty.version>9.3.6.v20151106</plugins.jetty.version>
+		<plugins.maven.compiler.version>3.5.1</plugins.maven.compiler.version>
+		<plugins.maven-jar-plugin.version>2.6</plugins.maven-jar-plugin.version>
+		<plugins.maven-war-plugin.version>2.1.1</plugins.maven-war-plugin.version>
+		<plugins.sonar.version>3.0.1</plugins.sonar.version>
+		<plugins.tomcat7.version>2.2</plugins.tomcat7.version>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<plugins.surefire.version>2.20</plugins.surefire.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>wheater-predictor-api</artifactId>
+				<version>${deps.project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>javax.ws.rs</groupId>
+				<artifactId>javax.ws.rs-api</artifactId>
+				<version>${deps.jax-rs-api.version}</version>
+			</dependency>
+
+			<!-- Jersey -->
+			<dependency>
+				<groupId>org.glassfish.jersey.ext</groupId>
+				<artifactId>jersey-spring3</artifactId>
+				<version>${deps.jersey.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.glassfish.hk2.external</groupId>
+						<artifactId>bean-validator</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-core</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.glassfish.jersey.media</groupId>
+				<artifactId>jersey-media-json-jackson</artifactId>
+				<version>${deps.jersey.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${deps.jackson.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.glassfish.jersey.core</groupId>
+				<artifactId>jersey-client</artifactId>
+				<version>${deps.jersey.version}</version>
+			</dependency>
+			<!-- FIN Jersey -->
+
+			<!-- Spring -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${deps.spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context-support</artifactId>
+				<version>${deps.spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>${deps.spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${deps.spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-tx</artifactId>
+				<version>${deps.spring.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>${deps.spring.version}</version>
+			</dependency>
+			<!-- FIN Spring -->
+
+			<!-- Logging -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${deps.slf4j.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-core</artifactId>
+				<version>${deps.logback.verison}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>${deps.logback.verison}</version>
+			</dependency>
+			<!-- FIN Logging -->
+
+			<!-- Swagger -->
+			<dependency>
+				<groupId>io.swagger</groupId>
+				<artifactId>swagger-jersey2-jaxrs</artifactId>
+				<version>${deps.swagger.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.swagger</groupId>
+				<artifactId>swagger-core</artifactId>
+				<version>${deps.swagger.version}</version>
+			</dependency>
+			<!-- FIN Swagger -->
+
+			<!-- test -->
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${deps.spring.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${deps.junit.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.glassfish.jersey.test-framework</groupId>
+				<artifactId>jersey-test-framework-core</artifactId>
+				<version>${deps.jersey.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.glassfish.jersey.test-framework.providers</groupId>
+				<artifactId>jersey-test-framework-provider-jetty</artifactId>
+				<version>${deps.jersey.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>${deps.mockito.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<!-- FIN test -->
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<finalName>wheater-predictor-service</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${plugins.jacoco.version}</version>
+				<configuration>
+					<excludes>
+						<exclude>**/service/*</exclude>
+						<exclude>**/api/*</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>default-report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>check</id>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<rule>
+									<element>CLASS</element>
+									<limits>
+										<limit>
+											<counter>LINE</counter>
+											<value>COVEREDRATIO</value>
+											<minimum>0.60</minimum>
+										</limit>
+										<limit>
+											<counter>BRANCH</counter>
+											<value>COVEREDRATIO</value>
+											<minimum>0.80</minimum>
+										</limit>
+										<limit>
+											<counter>COMPLEXITY</counter>
+											<value>COVEREDRATIO</value>
+											<minimum>0.70</minimum>
+										</limit>
+									</limits>
+								</rule>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<configuration>
+					<rules>
+						<requireReleaseDeps>
+						</requireReleaseDeps>
+					</rules>
+					<fail>true</fail>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>${plugins.maven-jar-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${plugins.maven-war-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${plugins.surefire.version}</version>
+				<configuration>
+					<forkCount>0</forkCount>
+					<reuseForks>false</reuseForks>
+					<argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
+				</configuration>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.tomcat.maven</groupId>
+					<artifactId>tomcat7-maven-plugin</artifactId>
+					<version>${plugins.tomcat7.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${plugins.maven.compiler.version}</version>
+					<inherited>true</inherited>
+					<configuration>
+						<source>${properties.java.version}</source>
+						<target>${properties.java.version}</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-maven-plugin</artifactId>
+					<version>${plugins.jetty.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.sonarsource.scanner.maven</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>${plugins.sonar.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>${plugins.enforcer.version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>
