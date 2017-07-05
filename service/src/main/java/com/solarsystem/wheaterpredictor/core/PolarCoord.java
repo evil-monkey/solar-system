@@ -2,8 +2,17 @@ package com.solarsystem.wheaterpredictor.core;
 
 public final class PolarCoord {
 
-	public class RectangularCoord {
+	public static class RectangularCoord {
 
+		public RectangularCoord() {
+			super();
+		}
+		
+		public RectangularCoord(Double x, Double y) {
+			this.x = x;
+			this.y = y;
+		}
+		
 		private Double x;
 		private Double y;
 
@@ -61,5 +70,21 @@ public final class PolarCoord {
 		rectangularCoord.setX(Math.cos(azimuth) * radius);
 		rectangularCoord.setY(Math.sin(azimuth) * radius);
 		return rectangularCoord;
+	}
+
+	@Override
+	public int hashCode() {
+		return radius * 1000 + azimuth;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		boolean result = obj != null && obj instanceof PolarCoord;
+		if (result) {
+			PolarCoord other = (PolarCoord) obj;
+			result = other.getRadius() != null && other.getRadius().equals(this.getRadius())
+					&& other.getAzimuth() != null && other.getAzimuth().equals(this.getAzimuth());
+		}
+		return result;
 	}
 }

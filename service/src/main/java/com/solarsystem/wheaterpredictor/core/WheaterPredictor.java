@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import com.solarsystem.wheaterpredictor.core.events.EventType;
-import com.solarsystem.wheaterpredictor.core.events.WheaterEventType;
 import com.solarsystem.wheaterpredictor.core.events.wheater.TransitionWheater;
+import com.solarsystem.wheaterpredictor.core.events.wheater.WheaterEventType;
 
 public class WheaterPredictor implements Predictor {
 
@@ -13,16 +13,17 @@ public class WheaterPredictor implements Predictor {
 
 	@Override
 	public Collection<EventType> predict(Integer day) {
-		
-		//TODO: hacerlo en paralelo
-		
+
+		// TODO: hacerlo en paralelo
+
 		Collection<EventType> events = eventTypes.stream().map(event -> event.occurs(day))
-				.filter(event -> event != null).collect(Collectors.toSet());
-		
-		if(events.size() < 1) {
+				.filter(event -> event != null).flatMap(listContainer -> listContainer.stream())
+				.collect(Collectors.toSet());
+
+		if (events.size() < 1) {
 			events.add(new TransitionWheater());
 		}
-		
+
 		return events;
 	}
 

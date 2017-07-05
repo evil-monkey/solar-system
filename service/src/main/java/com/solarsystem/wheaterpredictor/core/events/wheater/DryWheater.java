@@ -2,7 +2,6 @@ package com.solarsystem.wheaterpredictor.core.events.wheater;
 
 import com.solarsystem.wheaterpredictor.core.PolarCoord;
 import com.solarsystem.wheaterpredictor.core.events.CyclicEventPattern;
-import com.solarsystem.wheaterpredictor.core.events.WheaterEventType;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
 import com.solarsystem.wheaterpredictor.core.orbits.Orbit;
 
