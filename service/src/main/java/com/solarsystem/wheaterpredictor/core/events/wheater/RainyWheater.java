@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.solarsystem.wheaterpredictor.core.PolarCoord.RectangularCoord;
-import com.solarsystem.wheaterpredictor.core.events.CyclicEventPattern;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
 
 public class RainyWheater extends WheaterEventType {
@@ -22,7 +21,7 @@ public class RainyWheater extends WheaterEventType {
 	}
 
 	@Override
-	protected CyclicEventPattern obtainPattern() throws PatternCalculationError {
+	protected OrbitRelatedUniformEventPattern obtainPattern() throws PatternCalculationError {
 
 		// assumes sun is in solar system center (0,0)
 
@@ -55,10 +54,12 @@ public class RainyWheater extends WheaterEventType {
 				// misma extensión
 				if (count) {
 					extension++;
+					updatePositionsForRelatedEvents(predictionDay, positions);
 				} else {
 					if (firstOccurrence == null) {
 						firstOccurrence = day;
 						count = true;
+						updatePositionsForRelatedEvents(predictionDay, positions);
 					} else {
 						secondOcurrence = day;
 					}
@@ -77,9 +78,25 @@ public class RainyWheater extends WheaterEventType {
 		if (firstOccurrence == null || secondOcurrence == null) {
 			throw new PatternCalculationError("Can't get a pattern for event.");
 		}
-		
-		return new CyclicEventPattern(firstOccurrence, secondOcurrence, extension);
 
+		updatePeriodForRelatedEvents(secondOcurrence - firstOccurrence);
+
+		return new OrbitRelatedUniformEventPattern(firstOccurrence, secondOcurrence, extension);
+
+	}
+
+	private void updatePeriodForRelatedEvents(int period) {
+		if (this.getRelatedEventTypes() != null) {
+			this.getRelatedEventTypes().stream()
+					.forEach(relatedEvent -> relatedEvent.calculatePatternFromPositions(period));
+		}
+	}
+
+	private void updatePositionsForRelatedEvents(final int predictionDay, List<RectangularCoord> positions) {
+		if (this.getRelatedEventTypes() != null) {
+			this.getRelatedEventTypes().stream()
+					.forEach(relatedEvent -> relatedEvent.addPositionsData(positions, predictionDay));
+		}
 	}
 
 	private boolean isSunBetweenPlanets(List<RectangularCoord> positions) {

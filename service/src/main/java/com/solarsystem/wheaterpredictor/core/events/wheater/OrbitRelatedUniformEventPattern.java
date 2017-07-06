@@ -1,6 +1,8 @@
-package com.solarsystem.wheaterpredictor.core.events;
+package com.solarsystem.wheaterpredictor.core.events.wheater;
 
-public class CyclicEventPattern {
+import com.solarsystem.wheaterpredictor.core.events.EventPattern;
+
+public class OrbitRelatedUniformEventPattern implements EventPattern {
 
 	/**
 	 * how many days are between two occurrences
@@ -16,9 +18,19 @@ public class CyclicEventPattern {
 	 * extension of event beyond event first day
 	 */
 	private Integer extension;
+	
+	public OrbitRelatedUniformEventPattern() {
+		super();
+	}
+	
+	/**
+	 * 
+	 * @param firstOccurrence
+	 * @param secondOccurrence
+	 * @param extension
+	 */
 
-	public CyclicEventPattern(Integer firstOccurrence,
-			Integer secondOccurrence, Integer extension) {
+	public OrbitRelatedUniformEventPattern(Integer firstOccurrence, Integer secondOccurrence, Integer extension) {
 		this.firstOccurrence = firstOccurrence;
 		this.period = secondOccurrence - firstOccurrence;
 		this.extension = extension;
@@ -48,6 +60,7 @@ public class CyclicEventPattern {
 		this.extension = extension;
 	}
 
+	@Override
 	public Boolean isDayInPattern(Integer day) {
 		Integer rem = (day % period) - firstOccurrence;
 

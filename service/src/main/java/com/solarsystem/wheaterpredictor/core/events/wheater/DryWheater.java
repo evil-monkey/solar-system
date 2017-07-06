@@ -1,7 +1,6 @@
 package com.solarsystem.wheaterpredictor.core.events.wheater;
 
 import com.solarsystem.wheaterpredictor.core.PolarCoord;
-import com.solarsystem.wheaterpredictor.core.events.CyclicEventPattern;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
 import com.solarsystem.wheaterpredictor.core.orbits.Orbit;
 
@@ -19,7 +18,7 @@ public final class DryWheater extends WheaterEventType {
 	}
 
 	@Override
-	protected CyclicEventPattern obtainPattern() throws PatternCalculationError {
+	protected OrbitRelatedUniformEventPattern obtainPattern() throws PatternCalculationError {
 		// Assummes day 0 is first occurence
 		Integer firstOccurrence = 0;
 		Integer secondOcurrence = null;
@@ -44,7 +43,7 @@ public final class DryWheater extends WheaterEventType {
 			throw new PatternCalculationError("Can't get a pattern for event.");
 		}
 
-		return new CyclicEventPattern(firstOccurrence, secondOcurrence, 0);
+		return new OrbitRelatedUniformEventPattern(firstOccurrence, secondOcurrence, 0);
 
 	}
 
@@ -54,4 +53,5 @@ public final class DryWheater extends WheaterEventType {
 				|| Math.abs(position2.getAzimuth() - position1.getAzimuth()) == 180;
 	}
 
+	
 }

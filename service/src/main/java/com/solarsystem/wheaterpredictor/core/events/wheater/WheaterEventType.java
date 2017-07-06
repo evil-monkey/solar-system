@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.solarsystem.wheaterpredictor.core.events.CyclicEventPattern;
 import com.solarsystem.wheaterpredictor.core.events.EventType;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
 import com.solarsystem.wheaterpredictor.core.orbits.Orbit;
@@ -14,9 +13,9 @@ public abstract class WheaterEventType implements EventType {
 
 	protected static final int SECOND_OCCURRENCE_ITERATIONS_LIMIT = 3653;
 
-	private CyclicEventPattern pattern;
+	private OrbitRelatedUniformEventPattern pattern;
 	private Collection<Orbit> orbits;
-	private Collection<WheaterEventType> relatedEventTypes;
+	private Collection<RelatedWheaterEventType> relatedEventTypes;
 
 	/**
 	 * WheaterEventType knows if it occurs in a specific day
@@ -28,8 +27,11 @@ public abstract class WheaterEventType implements EventType {
 	@Override
 	public Collection<EventType> occurs(Integer day) {
 
-		if (pattern == null) {
-			pattern = obtainPattern();
+		// para evitar que mas de un hilo trate de inicializar el pattern
+		synchronized (pattern) {
+			if (pattern == null) {
+				pattern = obtainPattern();
+			}
 		}
 
 		List<EventType> events = null;
@@ -47,7 +49,7 @@ public abstract class WheaterEventType implements EventType {
 		return events;
 	}
 
-	protected abstract CyclicEventPattern obtainPattern() throws PatternCalculationError;
+	protected abstract OrbitRelatedUniformEventPattern obtainPattern() throws PatternCalculationError;
 
 	public Collection<Orbit> getOrbits() {
 		return orbits;
@@ -57,11 +59,11 @@ public abstract class WheaterEventType implements EventType {
 		this.orbits = orbits;
 	}
 
-	public Collection<WheaterEventType> getRelatedEventTypes() {
+	public Collection<RelatedWheaterEventType> getRelatedEventTypes() {
 		return relatedEventTypes;
 	}
 
-	public void setRelatedEventTypes(Collection<WheaterEventType> relatedEventTypes) {
+	public void setRelatedEventTypes(Collection<RelatedWheaterEventType> relatedEventTypes) {
 		this.relatedEventTypes = relatedEventTypes;
 	}
 }
