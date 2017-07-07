@@ -18,11 +18,11 @@ public class OrbitRelatedUniformEventPattern implements EventPattern {
 	 * extension of event beyond event first day
 	 */
 	private Integer extension;
-	
+
 	public OrbitRelatedUniformEventPattern() {
 		super();
 	}
-	
+
 	/**
 	 * 
 	 * @param firstOccurrence

@@ -2,28 +2,39 @@ package com.solarsystem.wheaterpredictor.core.events.wheater;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.swing.text.Position;
+import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.solarsystem.wheaterpredictor.core.PolarCoord.RectangularCoord;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
+import com.solarsystem.wheaterpredictor.core.helpers.RectHelper;
 import com.solarsystem.wheaterpredictor.core.orbits.Orbit;
 
 public class GoodWheater extends WheaterEventType {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GoodWheater.class);
 
+	@Inject
+	private RectHelper rectHelper;
+
 	@Override
 	public String getName() {
 		return "Buen tiempo!";
+	}
+
+	public RectHelper getRectHelper() {
+		return rectHelper;
+	}
+
+	public void setRectHelper(RectHelper rectHelper) {
+		this.rectHelper = rectHelper;
 	}
 
 	@Override
@@ -51,7 +62,7 @@ public class GoodWheater extends WheaterEventType {
 				throw new PatternCalculationError("This algorithm requires 3 different positions at least!");
 			}
 
-			if (allAreAlignedExceptByTheSun(positions, sun, tolerance)) {
+			if (rectHelper.allAreAlignedExceptByTheSun(positions, sun, tolerance)) {
 				if (firstOccurrence == null) {
 					firstOccurrence = predictionDay;
 				} else {
@@ -69,36 +80,8 @@ public class GoodWheater extends WheaterEventType {
 		return new OrbitRelatedUniformEventPattern(firstOccurrence, secondOcurrence, 0);
 	}
 
-	private boolean allAreAlignedExceptByTheSun(List<RectangularCoord> positions, RectangularCoord sun,
-			Double tolerance) {
-
-		boolean aligned = true;
-
-		Iterator<RectangularCoord> positionsIterator = positions.iterator();
-
-		// take first 2 positions and calculate the slope
-		RectangularCoord from = positionsIterator.next();
-		Double slope = getSlope(from, positionsIterator.next());
-
-		// discard sun is aligned
-		if (!isAligned(sun, slope, from, tolerance)) {
-			// check the rest of planet positions
-			while (positionsIterator.hasNext()) {
-				if (!isAligned(positionsIterator.next(), slope, from, tolerance)) {
-					aligned = false;
-					break;
-				}
-			}
-
-		} else {
-			aligned = false;
-		}
-
-		return aligned;
-	}
-
 	private Double getTolerance(Collection<Orbit> orbits) {
-		// Defino el calculo de tolerancia de forma arbitraria como el másimo
+		// Defino el calculo de tolerancia de forma arbitraria como el máximo
 		// incremento posible
 		// en las ordenadas dentro de todo el sistema cuando el ángulo se
 		// incrementa en 1º
@@ -110,20 +93,6 @@ public class GoodWheater extends WheaterEventType {
 		} catch (NoSuchElementException nsee) {
 			throw new PatternCalculationError("Can't calculate tolerance!");
 		}
-	}
-
-	private boolean isAligned(RectangularCoord to, Double slope, RectangularCoord from, Double tolerance) {
-		// y-y0 = m (x-x0) -> y = m (x-x0) + y0
-		Double expectedY = slope * (to.getX() - from.getX()) + from.getY();
-
-		double difference = Math.abs(expectedY - to.getY());
-
-		return difference <= tolerance;
-
-	}
-
-	private Double getSlope(RectangularCoord from, RectangularCoord to) {
-		return ((double) (to.getY() - from.getY())) / (to.getX() - from.getX());
 	}
 
 }

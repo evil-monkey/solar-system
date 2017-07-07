@@ -1,7 +1,10 @@
 package com.solarsystem.wheaterpredictor.core.events.wheater;
 
+import javax.inject.Inject;
+
 import com.solarsystem.wheaterpredictor.core.PolarCoord;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
+import com.solarsystem.wheaterpredictor.core.helpers.AngularHelper;
 import com.solarsystem.wheaterpredictor.core.orbits.Orbit;
 
 /**
@@ -12,9 +15,20 @@ import com.solarsystem.wheaterpredictor.core.orbits.Orbit;
  */
 public final class DryWheater extends WheaterEventType {
 
+	@Inject
+	private AngularHelper angularHelper;
+
 	@Override
 	public String getName() {
 		return "Clima seco";
+	}
+
+	public AngularHelper getAngularHelper() {
+		return angularHelper;
+	}
+
+	public void setAngularHelper(AngularHelper angularHelper) {
+		this.angularHelper = angularHelper;
 	}
 
 	@Override
@@ -28,8 +42,7 @@ public final class DryWheater extends WheaterEventType {
 			for (Orbit orbit : this.getOrbits()) {
 				if (position == null) {
 					position = orbit.calculatePosition(day);
-				} else if (areNotSameOrOppositeAzimuth(
-						orbit.calculatePosition(day), position)) {
+				} else if (angularHelper.areNotSameOrOppositeAzimuth(orbit.calculatePosition(day), position)) {
 					secondOcurrence = null;
 					break;
 				}
@@ -47,11 +60,4 @@ public final class DryWheater extends WheaterEventType {
 
 	}
 
-	private boolean areNotSameOrOppositeAzimuth(PolarCoord position1,
-			PolarCoord position2) {
-		return position1.getAzimuth().equals(position2.getAzimuth())
-				|| Math.abs(position2.getAzimuth() - position1.getAzimuth()) == 180;
-	}
-
-	
 }

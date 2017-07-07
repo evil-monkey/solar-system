@@ -4,17 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Lists;
 import com.solarsystem.wheaterpredictor.core.PolarCoord.RectangularCoord;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
+import com.solarsystem.wheaterpredictor.core.helpers.TriangleHelper;
 
 public class RainyWheater extends WheaterEventType {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RainyWheater.class);
 
+	@Inject
+	private TriangleHelper triangleHelper;
+	
 	@Override
 	public String getName() {
 		return "Clima lluvioso";
@@ -24,6 +29,7 @@ public class RainyWheater extends WheaterEventType {
 	protected OrbitRelatedUniformEventPattern obtainPattern() throws PatternCalculationError {
 
 		// assumes sun is in solar system center (0,0)
+		RectangularCoord sunPosition = new RectangularCoord(0.0d, 0.0d);
 
 		if (this.getOrbits() == null && this.getOrbits().size() != 3) {
 			LOGGER.warn("Only 3 planets determines a rainy wheater!");
@@ -44,12 +50,7 @@ public class RainyWheater extends WheaterEventType {
 					this.getOrbits().stream().map(orbit -> orbit.calculatePosition(predictionDay).getRectangularCoord())
 							.collect(Collectors.toSet()));
 
-			if (positions.size() < 3) {
-				LOGGER.warn("Can't draw a triangle with these position!");
-				throw new PatternCalculationError("Can't draw a triangle with these position!");
-			}
-
-			if (isSunBetweenPlanets(positions)) {
+			if (triangleHelper.isSunBetweenPlanets(positions, sunPosition)) {
 				// solo cuenta para la primera, asume q la segunda tiene la
 				// misma extensión
 				if (count) {
@@ -99,37 +100,12 @@ public class RainyWheater extends WheaterEventType {
 		}
 	}
 
-	private boolean isSunBetweenPlanets(List<RectangularCoord> positions) {
-		int mainOrientation = getTriangleOrientation(positions);
-		RectangularCoord sunPosition = new RectangularCoord(0.0d, 0.0d);
-
-		boolean result = false;
-
-		// A1A2P, A2A3P, A3A1P
-		List<RectangularCoord> st = Lists.newArrayList(positions);
-		st.set(2, sunPosition);
-		if (mainOrientation * getTriangleOrientation(st) > 0) {
-			st = new ArrayList<>(3);
-			st.addAll(positions.subList(1, 2));
-			st.add(sunPosition);
-			if (mainOrientation * getTriangleOrientation(st) > 0) {
-				st = new ArrayList<>(3);
-				st.add(positions.get(2));
-				st.add(positions.get(0));
-				st.add(sunPosition);
-
-				result = mainOrientation * getTriangleOrientation(st) > 0;
-			}
-		}
-
-		return result;
+	public TriangleHelper getTriangleHelper() {
+		return triangleHelper;
 	}
 
-	private int getTriangleOrientation(List<RectangularCoord> vertices) {
-		// (A1.x - A3.x) * (A2.y - A3.y) - (A1.y - A3.y) * (A2.x - A3.x)
-		return (vertices.get(0).getX() - vertices.get(2).getX()) * (vertices.get(1).getY() - vertices.get(2).getY())
-				- (vertices.get(0).getY() - vertices.get(2).getY())
-						* (vertices.get(1).getX() - vertices.get(2).getX()) >= 0 ? 1 : -1;
+	public void setTriangleHelper(TriangleHelper triangleHelper) {
+		this.triangleHelper = triangleHelper;
 	}
 
 }

@@ -3,6 +3,7 @@ package com.solarsystem.wheaterpredictor.core.events.wheater;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 import com.solarsystem.wheaterpredictor.core.events.EventType;
@@ -16,6 +17,7 @@ public abstract class WheaterEventType implements EventType {
 	private OrbitRelatedUniformEventPattern pattern;
 	private Collection<Orbit> orbits;
 	private Collection<RelatedWheaterEventType> relatedEventTypes;
+	private ReentrantLock lock = new ReentrantLock();
 
 	/**
 	 * WheaterEventType knows if it occurs in a specific day
@@ -28,10 +30,13 @@ public abstract class WheaterEventType implements EventType {
 	public Collection<EventType> occurs(Integer day) {
 
 		// para evitar que mas de un hilo trate de inicializar el pattern
-		synchronized (pattern) {
+		lock.lock();
+		try {
 			if (pattern == null) {
 				pattern = obtainPattern();
 			}
+		} finally {
+			lock.unlock();
 		}
 
 		List<EventType> events = null;
