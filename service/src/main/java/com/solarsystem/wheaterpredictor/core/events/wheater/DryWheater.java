@@ -36,7 +36,7 @@ public final class DryWheater extends WheaterEventType {
 		// Assummes day 0 is first occurence
 		Integer firstOccurrence = 0;
 		Integer secondOcurrence = null;
-		for (int day = 1; day < SECOND_OCCURRENCE_ITERATIONS_LIMIT; day++) {
+		for (int day = 1; day < this.getPatternCalculationMaxIterations(); day++) {
 			PolarCoord position = null;
 			secondOcurrence = day;
 			for (Orbit orbit : this.getOrbits()) {

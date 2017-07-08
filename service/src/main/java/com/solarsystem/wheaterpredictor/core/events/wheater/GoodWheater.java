@@ -3,7 +3,6 @@ package com.solarsystem.wheaterpredictor.core.events.wheater;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -15,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.solarsystem.wheaterpredictor.core.PolarCoord.RectangularCoord;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
 import com.solarsystem.wheaterpredictor.core.helpers.RectHelper;
+import com.solarsystem.wheaterpredictor.core.orbits.CircularOrbit;
 import com.solarsystem.wheaterpredictor.core.orbits.Orbit;
 
 public class GoodWheater extends WheaterEventType {
@@ -29,14 +29,6 @@ public class GoodWheater extends WheaterEventType {
 		return "Buen tiempo!";
 	}
 
-	public RectHelper getRectHelper() {
-		return rectHelper;
-	}
-
-	public void setRectHelper(RectHelper rectHelper) {
-		this.rectHelper = rectHelper;
-	}
-
 	@Override
 	protected OrbitRelatedUniformEventPattern obtainPattern() throws PatternCalculationError {
 
@@ -48,7 +40,7 @@ public class GoodWheater extends WheaterEventType {
 
 		Double tolerance = getTolerance(this.getOrbits());
 
-		for (int day = 1; day < SECOND_OCCURRENCE_ITERATIONS_LIMIT; day++) {
+		for (int day = 1; day < this.getPatternCalculationMaxIterations(); day++) {
 			final int predictionDay = day;
 
 			// uses a set to disable repeat position (config, error) then a list
@@ -86,13 +78,9 @@ public class GoodWheater extends WheaterEventType {
 		// en las ordenadas dentro de todo el sistema cuando el ángulo se
 		// incrementa en 1º
 		// t = Rmax * sen 1
-		Optional<Integer> maxRadius = orbits.stream().map(orbit -> orbit.getInitialPosition().getRadius())
-				.max(Integer::max);
-		try {
-			return maxRadius.get() * Math.sin(1);
-		} catch (NoSuchElementException nsee) {
-			throw new PatternCalculationError("Can't calculate tolerance!");
-		}
+		Optional<CircularOrbit> maxRadius = orbits.stream().map(orbit -> (CircularOrbit) orbit)
+				.max(CircularOrbit.radiusComparator);
+		return maxRadius.get().getRadius() * Math.sin(Math.toRadians(1.0d));
 	}
 
 }

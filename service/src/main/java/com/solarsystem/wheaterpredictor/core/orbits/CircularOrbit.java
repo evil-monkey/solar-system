@@ -1,9 +1,27 @@
 package com.solarsystem.wheaterpredictor.core.orbits;
 
+import java.util.Comparator;
+
 import com.solarsystem.wheaterpredictor.core.PolarCoord;
 
 public class CircularOrbit extends Orbit {
 
+	public static Comparator<CircularOrbit> radiusComparator = new Comparator<CircularOrbit>() {
+
+		@Override
+		public int compare(CircularOrbit o1, CircularOrbit o2) {
+			int result = 0;
+			if (o1 == null || o1.getRadius() == null) {
+				result = -1;
+			} else if (o2 == null || o2.getRadius() == null) {
+				result = 1;
+			} else {
+				result = o1.getRadius().compareTo(o2.getRadius());
+			}
+			return result;
+		}
+	};
+	
 	private int angularSpeed;
 
 	public int getAngularSpeed() {
@@ -19,7 +37,7 @@ public class CircularOrbit extends Orbit {
 	 * 
 	 * @return
 	 */
-	public int getRadius() {
+	public Integer getRadius() {
 		return this.getInitialPosition().getRadius();
 	}
 

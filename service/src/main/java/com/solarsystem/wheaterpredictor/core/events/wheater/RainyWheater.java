@@ -19,7 +19,7 @@ public class RainyWheater extends WheaterEventType {
 
 	@Inject
 	private TriangleHelper triangleHelper;
-	
+
 	@Override
 	public String getName() {
 		return "Clima lluvioso";
@@ -41,7 +41,7 @@ public class RainyWheater extends WheaterEventType {
 		Integer extension = 0;
 		Boolean count = false;
 
-		for (int day = 1; day < SECOND_OCCURRENCE_ITERATIONS_LIMIT; day++) {
+		for (int day = 1; day < this.getPatternCalculationMaxIterations(); day++) {
 			final int predictionDay = day;
 
 			// uses a set to disable repeat position (config, error) then a list
