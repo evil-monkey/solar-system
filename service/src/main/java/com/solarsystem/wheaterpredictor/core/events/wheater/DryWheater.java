@@ -34,26 +34,31 @@ public final class DryWheater extends WheaterEventType {
 
 	@Override
 	protected OrbitRelatedUniformEventPattern obtainPattern() throws PatternCalculationError {
-		// Assummes day 0 is first occurence
-		Integer firstOccurrence = 0;
+		//assumes sun is the center
+		Integer firstOccurrence = null;
 		Integer secondOcurrence = null;
-		for (int day = 1; day < this.getPatternCalculationMaxIterations(); day++) {
+
+		daybreak: for (int day = 0; day < this.getPatternCalculationMaxIterations(); day++) {
 			PolarCoord position = null;
-			secondOcurrence = day;
 			for (Orbit orbit : this.getOrbits()) {
 				if (position == null) {
+					// first orbit position to calculate for current date
 					position = orbit.calculatePosition(day);
-				} else if (angularHelper.areNotSameOrOppositeAzimuth(orbit.calculatePosition(day), position)) {
-					secondOcurrence = null;
-					break;
+				} else if (!angularHelper.areNotSameOrOppositeAzimuth(orbit.calculatePosition(day), position)) {
+					//some are not aligned
+					continue daybreak;
 				}
 			}
-			if (secondOcurrence != null) {
-				break;
+			//if it reach this is because all positions are aligned with sun
+			if (firstOccurrence == null) {
+				firstOccurrence = day;
+			} else if (secondOcurrence == null) {
+				secondOcurrence = day;
+				break daybreak;
 			}
 		}
 
-		if (secondOcurrence == null) {
+		if (firstOccurrence == null || secondOcurrence == null) {
 			throw new PatternCalculationError("Can't get a pattern for event.");
 		}
 

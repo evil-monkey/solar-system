@@ -6,17 +6,12 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
 import com.solarsystem.wheaterpredictor.core.helpers.TriangleHelper;
 import com.solarsystem.wheaterpredictor.core.orbits.OrbitRelatedUniformEventPattern;
 import com.solarsystem.wheaterpredictor.core.orbits.PolarCoord.RectangularCoord;
 
-public class RainyWheater extends WheaterEventType {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(RainyWheater.class);
+public final class RainyWheater extends WheaterEventType {
 
 	@Inject
 	private TriangleHelper triangleHelper;
@@ -32,17 +27,12 @@ public class RainyWheater extends WheaterEventType {
 		// assumes sun is in solar system center (0,0)
 		RectangularCoord sunPosition = new RectangularCoord(0.0d, 0.0d);
 
-		if (this.getOrbits() == null && this.getOrbits().size() != 3) {
-			LOGGER.warn("Only 3 planets determines a rainy wheater!");
-			throw new PatternCalculationError("Only 3 planets determines a rainy wheater!");
-		}
-
 		Integer firstOccurrence = null;
 		Integer secondOcurrence = null;
 		Integer extension = 0;
 		Boolean count = false;
 
-		for (int day = 1; day < this.getPatternCalculationMaxIterations(); day++) {
+		for (int day = 0; day < this.getPatternCalculationMaxIterations(); day++) {
 			final int predictionDay = day;
 
 			// uses a set to disable repeat position (config, error) then a list
@@ -63,16 +53,14 @@ public class RainyWheater extends WheaterEventType {
 						count = true;
 						updatePositionsForRelatedEvents(predictionDay, positions);
 					} else {
+						// obtuvo la segunda ocurrencia, sale
 						secondOcurrence = day;
+						break;
 					}
 
 				}
 			} else {
 				count = false;
-				// chequea si esta terminando la segunda ocurrencia
-				if (secondOcurrence != null) {
-					break;
-				}
 			}
 
 		}
@@ -99,14 +87,6 @@ public class RainyWheater extends WheaterEventType {
 			this.getRelatedEventTypes().stream()
 					.forEach(relatedEvent -> relatedEvent.addPositionsData(positions, predictionDay));
 		}
-	}
-
-	public TriangleHelper getTriangleHelper() {
-		return triangleHelper;
-	}
-
-	public void setTriangleHelper(TriangleHelper triangleHelper) {
-		this.triangleHelper = triangleHelper;
 	}
 
 }

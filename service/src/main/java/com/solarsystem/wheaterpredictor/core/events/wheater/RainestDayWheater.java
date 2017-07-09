@@ -47,13 +47,12 @@ public class RainestDayWheater extends RelatedWheaterEventType {
 	}
 
 	@Override
-	protected void addPositionsData(Collection<RectangularCoord> positions, Integer day)
-			throws PatternCalculationError {
+	public void addPositionsData(Collection<RectangularCoord> positions, Integer day) throws PatternCalculationError {
 		patternCalculatorBuffer.put(day, positions);
 	}
 
 	@Override
-	protected void calculatePatternFromPositions(Integer period) {
+	public void calculatePatternFromPositions(Integer period) {
 		if (patternCalculatorBuffer.size() < 1) {
 			throw new PatternCalculationError("No position to calculate a pattern");
 		}

@@ -11,67 +11,97 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import com.solarsystem.wheaterpredictor.core.events.EventType;
-import com.solarsystem.wheaterpredictor.core.events.wheater.GoodWheater;
 import com.solarsystem.wheaterpredictor.core.events.wheater.RelatedWheaterEventType;
+import com.solarsystem.wheaterpredictor.core.events.wheater.WheaterEventType;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
-import com.solarsystem.wheaterpredictor.core.helpers.RectHelper;
 import com.solarsystem.wheaterpredictor.core.orbits.OrbitRelatedUniformEventPattern;
-import com.solarsystem.wheaterpredictor.core.orbits.PolarCoord.RectangularCoord;
 
 public class WheaterEventTest extends WheaterEventTypeBaseTest {
 
-	@Mock
-	private RectHelper rectHelper;
+	private static class TestWheaterEventType extends WheaterEventType {
 
-	@Spy
-	@InjectMocks
-	private GoodWheater eventType;
+		public AtomicInteger obtainPatternCounter;
+		public OrbitRelatedUniformEventPattern patternMock;
+
+		public TestWheaterEventType() {
+			obtainPatternCounter = new AtomicInteger(0);
+			patternMock = Mockito.mock(OrbitRelatedUniformEventPattern.class);
+		}
+
+		@Override
+		public String getName() {
+			return "test wheater event type";
+		}
+
+		@Override
+		protected OrbitRelatedUniformEventPattern obtainPattern() throws PatternCalculationError {
+			obtainPatternCounter.incrementAndGet();
+			return patternMock;
+		}
+
+	}
+
+	private TestWheaterEventType eventType;
 
 	@Before
 	public void setUp() {
-		eventType = new GoodWheater();
 		initOrbits();
+
+		eventType = new TestWheaterEventType();
+
 		eventType.setOrbits(orbits);
-		MockitoAnnotations.initMocks(this);
+		assertEquals("Invalid eventType orbits", orbits, eventType.getOrbits());
+
+	}
+
+	@Test
+	public void testBasic() throws Exception {
+		Integer patternCalculationMaxIterations = eventType.getPatternCalculationMaxIterations();
+		assertNotNull("No patternCalculationMaxIterations", patternCalculationMaxIterations);
+
+		Integer patternCalculationMaxIterations2 = patternCalculationMaxIterations - 1;
+		eventType.setPatternCalculationMaxIterations(patternCalculationMaxIterations2);
+		assertEquals("Wrong patternCalculationMaxIterations", patternCalculationMaxIterations2,
+				eventType.getPatternCalculationMaxIterations());
+
+		RelatedWheaterEventType relatedEventType = Mockito.mock(RelatedWheaterEventType.class);
+		Collection<RelatedWheaterEventType> relatedEventTypes = new LinkedList<>();
+		relatedEventTypes.add(relatedEventType);
+
+		assertNull("Invalid initial relatedEventTypes", eventType.getRelatedEventTypes());
+		eventType.setRelatedEventTypes(relatedEventTypes);
+		assertEquals("Invalid relatedEventTypes", relatedEventTypes, eventType.getRelatedEventTypes());
+	}
+
+	@Test
+	public void getPatternTest() {
+
+		assertEquals("Wrong patternCalculation counter initialValue", 0, eventType.obtainPatternCounter.get());
+		OrbitRelatedUniformEventPattern pattern = eventType.getPattern();
+
+		assertNotNull("No pattern obtained", pattern);
+		assertEquals("Wrong patternCalculation counter initialValue", 1, eventType.obtainPatternCounter.get());
+		OrbitRelatedUniformEventPattern pattern2 = eventType.getPattern();
+
+		assertEquals("getPattern is not indempotent", pattern, pattern2);
+		assertEquals("Wrong patternCalculation counter initialValue", 1, eventType.obtainPatternCounter.get());
+
 	}
 
 	@Test
 	public void basicNoOccurrenceTest() {
-		final AtomicInteger iterations = new AtomicInteger(0);
-		Mockito.when(rectHelper.allAreAlignedExceptByTheSun(Mockito.anyListOf(RectangularCoord.class),
-				Mockito.any(RectangularCoord.class), Mockito.anyDouble())).thenAnswer(new Answer<Boolean>() {
-
-					@Override
-					public Boolean answer(InvocationOnMock invocation) throws Throwable {
-						return iterations.getAndIncrement() % 5 < 1;
-					}
-				});
-
+		Mockito.when(eventType.patternMock.isDayInPattern(Mockito.anyInt())).thenReturn(false);
 		Collection<EventType> events = eventType.occurs(2);
+
 		assertNull("Invalid occurs response", events);
 	}
 
 	@Test
 	public void basicOccurrenceTest() {
-		final AtomicInteger iterations = new AtomicInteger(0);
-		Mockito.when(rectHelper.allAreAlignedExceptByTheSun(Mockito.anyListOf(RectangularCoord.class),
-				Mockito.any(RectangularCoord.class), Mockito.anyDouble())).thenAnswer(new Answer<Boolean>() {
-
-					@Override
-					public Boolean answer(InvocationOnMock invocation) throws Throwable {
-						return iterations.getAndIncrement() % 5 < 1;
-					}
-				});
-
+		Mockito.when(eventType.patternMock.isDayInPattern(Mockito.anyInt())).thenReturn(true);
 		Collection<EventType> events = eventType.occurs(1);
 		assertNotNull("Invalid occurs response", events);
 		assertEquals("Invalid occurs response size", 1, events.size());
@@ -81,72 +111,9 @@ public class WheaterEventTest extends WheaterEventTypeBaseTest {
 	}
 
 	@Test
-	public void getPatternTest() {
-		final AtomicInteger iterations = new AtomicInteger(0);
-		Mockito.when(rectHelper.allAreAlignedExceptByTheSun(Mockito.anyListOf(RectangularCoord.class),
-				Mockito.any(RectangularCoord.class), Mockito.anyDouble())).thenAnswer(new Answer<Boolean>() {
-
-					@Override
-					public Boolean answer(InvocationOnMock invocation) throws Throwable {
-						return iterations.getAndIncrement() % 5 < 1;
-					}
-				});
-
-		OrbitRelatedUniformEventPattern pattern = eventType.getPattern();
-		assertNotNull("No pattern obtained", pattern);
-		assertNotNull("No pattern's firstTime", pattern.getFirstOccurrence());
-		assertEquals("Invalid pattern's firstTime", 1, pattern.getFirstOccurrence().intValue());
-		assertNotNull("No pattern's period", pattern.getPeriod());
-		assertEquals("Invalid pattern's period", 5, pattern.getPeriod().intValue());
-		assertNotNull("No pattern's extension", pattern.getExtension());
-		assertEquals("Invalid pattern's extension", 0, pattern.getExtension().intValue());
-
-	}
-
-	@Test(expected = PatternCalculationError.class)
-	public void cantObtainPatternTest() throws Exception {
-		eventType.setPatternCalculationMaxIterations(0);
-		eventType.occurs(1);
-	}
-
-	@Test(expected = PatternCalculationError.class)
-	public void cantObtainSecondOccurenceForPatternTest() throws Exception {
-		final AtomicInteger iterations = new AtomicInteger(0);
-		Mockito.when(rectHelper.allAreAlignedExceptByTheSun(Mockito.anyListOf(RectangularCoord.class),
-				Mockito.any(RectangularCoord.class), Mockito.anyDouble())).thenAnswer(new Answer<Boolean>() {
-
-					@Override
-					public Boolean answer(InvocationOnMock invocation) throws Throwable {
-						return iterations.getAndIncrement() % 5 < 1;
-					}
-				});
-
-		eventType.setPatternCalculationMaxIterations(6);
-		eventType.occurs(1);
-	}
-
-	@Test
-	public void noRecalculatePAtternTest() throws Exception {
-		// returns true always, so it took just two iterations in GoodWheater to
-		// calculate pattern so
-		// just two calls to rectHelper.allAreAlignedExceptByTheSun are being
-		// expected
-		Mockito.when(rectHelper.allAreAlignedExceptByTheSun(Mockito.anyListOf(RectangularCoord.class),
-				Mockito.any(RectangularCoord.class), Mockito.anyDouble())).thenReturn(true);
-
-		Mockito.verifyZeroInteractions(rectHelper);
-		eventType.getPattern();
-		Mockito.verify(rectHelper, Mockito.times(2)).allAreAlignedExceptByTheSun(
-				Mockito.anyListOf(RectangularCoord.class), Mockito.any(RectangularCoord.class), Mockito.anyDouble());
-		Mockito.verifyNoMoreInteractions(rectHelper);
-		eventType.getPattern();
-		Mockito.verifyNoMoreInteractions(rectHelper);
-	}
-
-	@Test
 	public void callToRelatedEventsInOccursCallTest() throws Exception {
-		Mockito.when(rectHelper.allAreAlignedExceptByTheSun(Mockito.anyListOf(RectangularCoord.class),
-				Mockito.any(RectangularCoord.class), Mockito.anyDouble())).thenReturn(true);
+
+		Mockito.when(eventType.patternMock.isDayInPattern(Mockito.anyInt())).thenReturn(true);
 
 		RelatedWheaterEventType relatedEventType = Mockito.mock(RelatedWheaterEventType.class);
 		Mockito.when(relatedEventType.occurs(Mockito.anyInt())).thenReturn(null);
@@ -164,8 +131,8 @@ public class WheaterEventTest extends WheaterEventTypeBaseTest {
 
 	@Test
 	public void withRelatedEventsOccurrenceOccursCallTest() throws Exception {
-		Mockito.when(rectHelper.allAreAlignedExceptByTheSun(Mockito.anyListOf(RectangularCoord.class),
-				Mockito.any(RectangularCoord.class), Mockito.anyDouble())).thenReturn(true);
+
+		Mockito.when(eventType.patternMock.isDayInPattern(Mockito.anyInt())).thenReturn(true);
 
 		RelatedWheaterEventType relatedEventType = Mockito.mock(RelatedWheaterEventType.class);
 		Collection<EventType> relatedEventsOccurrences = new LinkedList<>();
@@ -185,8 +152,8 @@ public class WheaterEventTest extends WheaterEventTypeBaseTest {
 
 	@Test
 	public void withoutRelatedEventsOccurrenceOccursCallTest() throws Exception {
-		Mockito.when(rectHelper.allAreAlignedExceptByTheSun(Mockito.anyListOf(RectangularCoord.class),
-				Mockito.any(RectangularCoord.class), Mockito.anyDouble())).thenReturn(true);
+		
+		Mockito.when(eventType.patternMock.isDayInPattern(Mockito.anyInt())).thenReturn(true);
 
 		RelatedWheaterEventType relatedEventType = Mockito.mock(RelatedWheaterEventType.class);
 		Mockito.when(relatedEventType.occurs(Mockito.anyInt())).thenReturn(null);
@@ -201,6 +168,7 @@ public class WheaterEventTest extends WheaterEventTypeBaseTest {
 		assertNotNull("No occurs calculated", result);
 		assertEquals("Wrong result size", 1, result.size());
 		assertTrue("Result doesn't contain main event", result.contains(eventType));
-		
+
 	}
+
 }

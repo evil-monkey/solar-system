@@ -20,6 +20,12 @@ public class TriangleBasicHelper implements TriangleHelper {
 
 	@Override
 	public boolean isSunBetweenPlanets(List<RectangularCoord> positions, RectangularCoord sunPosition) {
+		
+		if (positions == null || positions.size() != 3) {
+			LOGGER.warn("Only 3 planets determines a rainy wheater!");
+			throw new PatternCalculationError("Only 3 planets determines a rainy wheater!");
+		}
+
 		int mainOrientation = getTriangleOrientation(positions);
 
 		if (positions.size() < 3) {
@@ -48,7 +54,7 @@ public class TriangleBasicHelper implements TriangleHelper {
 
 		return result;
 	}
-	
+
 	@Override
 	public Double getPerimeter(Collection<RectangularCoord> vertices) {
 

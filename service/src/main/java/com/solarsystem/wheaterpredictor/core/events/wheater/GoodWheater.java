@@ -15,7 +15,7 @@ import com.solarsystem.wheaterpredictor.core.orbits.Orbit;
 import com.solarsystem.wheaterpredictor.core.orbits.OrbitRelatedUniformEventPattern;
 import com.solarsystem.wheaterpredictor.core.orbits.PolarCoord.RectangularCoord;
 
-public class GoodWheater extends WheaterEventType {
+public final class GoodWheater extends WheaterEventType {
 
 	
 	@Inject

@@ -16,7 +16,7 @@ public abstract class RelatedWheaterEventType extends WheaterEventType {
 	 * @throws PatternCalculationError
 	 * @throws EventPredictionException 
 	 */
-	protected abstract void addPositionsData(Collection<RectangularCoord> positions, Integer day);
+	public abstract void addPositionsData(Collection<RectangularCoord> positions, Integer day);
 
-	protected abstract void calculatePatternFromPositions(Integer period) throws PatternCalculationError;
+	public abstract void calculatePatternFromPositions(Integer period) throws PatternCalculationError;
 }
