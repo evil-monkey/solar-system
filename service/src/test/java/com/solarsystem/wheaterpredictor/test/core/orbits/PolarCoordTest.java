@@ -1,8 +1,6 @@
 package com.solarsystem.wheaterpredictor.test.core.orbits;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -139,6 +137,20 @@ public class PolarCoordTest {
 				new BigDecimal(rectangularCoord.getX(), new MathContext(1)));
 		assertEquals("Wrong rectangular coord Y", new BigDecimal(0.86602540378d, new MathContext(3)),
 				new BigDecimal(rectangularCoord.getY(), new MathContext(3)));
+
+	}
+
+	@Test
+	public void testToString() throws Exception {
+		PolarCoord pc = new PolarCoord(10, 30);
+		assertEquals("Wrong representation.", "p(10, 30)", pc.toString());
+
+	}
+
+	@Test
+	public void testRectangularToString() throws Exception {
+		RectangularCoord rc = new RectangularCoord(10.0d, 30.0d);
+		assertEquals("Wrong representation.", "r(10.0, 30.0)", rc.toString());
 
 	}
 

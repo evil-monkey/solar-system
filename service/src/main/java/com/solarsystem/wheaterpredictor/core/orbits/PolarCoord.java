@@ -32,6 +32,10 @@ public final class PolarCoord {
 			this.y = y;
 		}
 
+		@Override
+		public String toString() {
+			return new StringBuilder("r(").append(this.x).append(", ").append(this.y).append(")").toString();
+		}
 	}
 
 	private Integer azimuth;
@@ -92,6 +96,11 @@ public final class PolarCoord {
 		int inversion = this.getRadius() < 0 ? 180 : 0;
 		int relative = (this.getAzimuth() + inversion) % 360;
 		return relative >= 0 ? relative : 360 + relative;
+	}
+
+	@Override
+	public String toString() {
+		return new StringBuilder("p(").append(this.radius).append(", ").append(this.azimuth).append(")").toString();
 	}
 
 }
