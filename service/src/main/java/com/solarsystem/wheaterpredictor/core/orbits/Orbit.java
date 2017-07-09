@@ -1,11 +1,15 @@
 package com.solarsystem.wheaterpredictor.core.orbits;
 
-import com.solarsystem.wheaterpredictor.core.PolarCoord;
-
 public abstract class Orbit {
 
+	/**
+	 * initial position (reference)
+	 */
 	protected PolarCoord initialPosition;
 
+	/**
+	 * orbit identify
+	 */
 	protected String name;
 
 	public PolarCoord getInitialPosition() {
@@ -24,5 +28,10 @@ public abstract class Orbit {
 		this.name = name;
 	}
 
+	/**
+	 * calculates position for a particular day
+	 * @param day
+	 * @return {@link PolarCoord}
+	 */
 	public abstract PolarCoord calculatePosition(int day);
 }

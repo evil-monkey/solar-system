@@ -6,9 +6,10 @@ import java.util.TreeMap;
 
 import javax.inject.Inject;
 
-import com.solarsystem.wheaterpredictor.core.PolarCoord.RectangularCoord;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
 import com.solarsystem.wheaterpredictor.core.helpers.TriangleHelper;
+import com.solarsystem.wheaterpredictor.core.orbits.OrbitRelatedUniformEventPattern;
+import com.solarsystem.wheaterpredictor.core.orbits.PolarCoord.RectangularCoord;
 
 public class RainestDayWheater extends RelatedWheaterEventType {
 

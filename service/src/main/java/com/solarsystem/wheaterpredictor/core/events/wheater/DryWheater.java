@@ -2,10 +2,11 @@ package com.solarsystem.wheaterpredictor.core.events.wheater;
 
 import javax.inject.Inject;
 
-import com.solarsystem.wheaterpredictor.core.PolarCoord;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
 import com.solarsystem.wheaterpredictor.core.helpers.AngularHelper;
 import com.solarsystem.wheaterpredictor.core.orbits.Orbit;
+import com.solarsystem.wheaterpredictor.core.orbits.OrbitRelatedUniformEventPattern;
+import com.solarsystem.wheaterpredictor.core.orbits.PolarCoord;
 
 /**
  * When all planets are aligned with the sun

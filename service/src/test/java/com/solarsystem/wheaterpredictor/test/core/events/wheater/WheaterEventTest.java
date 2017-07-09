@@ -1,4 +1,4 @@
-package com.solarsystem.wheaterpredictor.test.core.events;
+package com.solarsystem.wheaterpredictor.test.core.events.wheater;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -19,13 +19,13 @@ import org.mockito.Spy;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import com.solarsystem.wheaterpredictor.core.PolarCoord.RectangularCoord;
 import com.solarsystem.wheaterpredictor.core.events.EventType;
 import com.solarsystem.wheaterpredictor.core.events.wheater.GoodWheater;
-import com.solarsystem.wheaterpredictor.core.events.wheater.OrbitRelatedUniformEventPattern;
 import com.solarsystem.wheaterpredictor.core.events.wheater.RelatedWheaterEventType;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
 import com.solarsystem.wheaterpredictor.core.helpers.RectHelper;
+import com.solarsystem.wheaterpredictor.core.orbits.OrbitRelatedUniformEventPattern;
+import com.solarsystem.wheaterpredictor.core.orbits.PolarCoord.RectangularCoord;
 
 public class WheaterEventTest extends WheaterEventTypeBaseTest {
 

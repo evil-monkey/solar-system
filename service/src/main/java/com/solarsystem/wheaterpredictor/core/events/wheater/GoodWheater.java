@@ -8,19 +8,16 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.solarsystem.wheaterpredictor.core.PolarCoord.RectangularCoord;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
 import com.solarsystem.wheaterpredictor.core.helpers.RectHelper;
 import com.solarsystem.wheaterpredictor.core.orbits.CircularOrbit;
 import com.solarsystem.wheaterpredictor.core.orbits.Orbit;
+import com.solarsystem.wheaterpredictor.core.orbits.OrbitRelatedUniformEventPattern;
+import com.solarsystem.wheaterpredictor.core.orbits.PolarCoord.RectangularCoord;
 
 public class GoodWheater extends WheaterEventType {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(GoodWheater.class);
-
+	
 	@Inject
 	private RectHelper rectHelper;
 
@@ -48,11 +45,6 @@ public class GoodWheater extends WheaterEventType {
 			List<RectangularCoord> positions = new ArrayList<RectangularCoord>(
 					this.getOrbits().stream().map(orbit -> orbit.calculatePosition(predictionDay).getRectangularCoord())
 							.collect(Collectors.toSet()));
-
-			if (positions.size() < 3) {
-				LOGGER.warn("This algorithm requires 3 different positions at least!");
-				throw new PatternCalculationError("This algorithm requires 3 different positions at least!");
-			}
 
 			if (rectHelper.allAreAlignedExceptByTheSun(positions, sun, tolerance)) {
 				if (firstOccurrence == null) {

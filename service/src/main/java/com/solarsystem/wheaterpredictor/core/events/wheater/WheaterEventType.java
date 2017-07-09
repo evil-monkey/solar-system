@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import com.solarsystem.wheaterpredictor.core.events.EventType;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
 import com.solarsystem.wheaterpredictor.core.orbits.Orbit;
+import com.solarsystem.wheaterpredictor.core.orbits.OrbitRelatedUniformEventPattern;
 
 public abstract class WheaterEventType implements EventType {
 

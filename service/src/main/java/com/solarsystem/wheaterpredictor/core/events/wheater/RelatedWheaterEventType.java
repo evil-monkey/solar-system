@@ -2,8 +2,8 @@ package com.solarsystem.wheaterpredictor.core.events.wheater;
 
 import java.util.Collection;
 
-import com.solarsystem.wheaterpredictor.core.PolarCoord.RectangularCoord;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
+import com.solarsystem.wheaterpredictor.core.orbits.PolarCoord.RectangularCoord;
 
 public abstract class RelatedWheaterEventType extends WheaterEventType {
 

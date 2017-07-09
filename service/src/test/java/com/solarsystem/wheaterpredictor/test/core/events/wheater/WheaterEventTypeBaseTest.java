@@ -1,11 +1,11 @@
-package com.solarsystem.wheaterpredictor.test.core.events;
+package com.solarsystem.wheaterpredictor.test.core.events.wheater;
 
 import java.util.Collection;
 import java.util.LinkedList;
 
-import com.solarsystem.wheaterpredictor.core.PolarCoord;
 import com.solarsystem.wheaterpredictor.core.orbits.CircularOrbit;
 import com.solarsystem.wheaterpredictor.core.orbits.Orbit;
+import com.solarsystem.wheaterpredictor.core.orbits.PolarCoord;
 
 public abstract class WheaterEventTypeBaseTest {
 

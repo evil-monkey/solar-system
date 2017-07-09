@@ -2,8 +2,8 @@ package com.solarsystem.wheaterpredictor.core.helpers.basic;
 
 import org.springframework.stereotype.Component;
 
-import com.solarsystem.wheaterpredictor.core.PolarCoord;
 import com.solarsystem.wheaterpredictor.core.helpers.AngularHelper;
+import com.solarsystem.wheaterpredictor.core.orbits.PolarCoord;
 
 @Component
 public class BasicAngularHelper implements AngularHelper {

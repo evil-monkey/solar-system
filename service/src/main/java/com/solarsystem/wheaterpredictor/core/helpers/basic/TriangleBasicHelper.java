@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.solarsystem.wheaterpredictor.core.PolarCoord.RectangularCoord;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
 import com.solarsystem.wheaterpredictor.core.helpers.TriangleHelper;
+import com.solarsystem.wheaterpredictor.core.orbits.PolarCoord.RectangularCoord;
 
 @Component
 public class TriangleBasicHelper implements TriangleHelper {

@@ -1,4 +1,4 @@
-package com.solarsystem.wheaterpredictor.core;
+package com.solarsystem.wheaterpredictor.core.orbits;
 
 public final class PolarCoord {
 
@@ -7,12 +7,12 @@ public final class PolarCoord {
 		public RectangularCoord() {
 			super();
 		}
-		
+
 		public RectangularCoord(Double x, Double y) {
 			this.x = x;
 			this.y = y;
 		}
-		
+
 		private Double x;
 		private Double y;
 
@@ -44,7 +44,7 @@ public final class PolarCoord {
 
 	}
 
-	public PolarCoord(Integer radius, Integer azimuth) {
+	public PolarCoord(int radius, int azimuth) {
 		this.radius = radius;
 		this.azimuth = azimuth;
 	}
@@ -53,7 +53,7 @@ public final class PolarCoord {
 		return azimuth;
 	}
 
-	public void setAzimuth(Integer azimuth) {
+	public void setAzimuth(int azimuth) {
 		this.azimuth = azimuth;
 	}
 
@@ -61,20 +61,20 @@ public final class PolarCoord {
 		return radius;
 	}
 
-	public void setRadius(Integer radius) {
+	public void setRadius(int radius) {
 		this.radius = radius;
 	}
 
 	public RectangularCoord getRectangularCoord() {
 		RectangularCoord rectangularCoord = new RectangularCoord();
-		rectangularCoord.setX(Math.cos(azimuth) * radius);
-		rectangularCoord.setY(Math.sin(azimuth) * radius);
+		rectangularCoord.setX(Math.cos(Math.toRadians(azimuth)) * radius);
+		rectangularCoord.setY(Math.sin(Math.toRadians(azimuth)) * radius);
 		return rectangularCoord;
 	}
 
 	@Override
 	public int hashCode() {
-		return radius * 1000 + azimuth;
+		return Math.abs(getRadius()) * 1000 + getRelativeAzimuth();
 	}
 
 	@Override
@@ -82,9 +82,16 @@ public final class PolarCoord {
 		boolean result = obj != null && obj instanceof PolarCoord;
 		if (result) {
 			PolarCoord other = (PolarCoord) obj;
-			result = other.getRadius() != null && other.getRadius().equals(this.getRadius())
-					&& other.getAzimuth() != null && other.getAzimuth().equals(this.getAzimuth());
+			result = Math.abs(other.getRadius()) == Math.abs(this.getRadius())
+					&& getRelativeAzimuth() == other.getRelativeAzimuth();
 		}
 		return result;
 	}
+
+	public int getRelativeAzimuth() {
+		int inversion = this.getRadius() < 0 ? 180 : 0;
+		int relative = (this.getAzimuth() + inversion) % 360;
+		return relative >= 0 ? relative : 360 + relative;
+	}
+
 }
