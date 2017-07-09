@@ -22,6 +22,8 @@ public class OrbitRelatedUniformEventPattern implements EventPattern {
 
 	public OrbitRelatedUniformEventPattern() {
 		super();
+		this.period = 1;
+		this.extension = 0;
 	}
 
 	/**

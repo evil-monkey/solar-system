@@ -25,8 +25,8 @@ public class OrbitRelatedUniformEventPatternTest {
 	public void defaultConstructorTest() {
 		OrbitRelatedUniformEventPattern pattern = new OrbitRelatedUniformEventPattern();
 		assertNull("Invalid first Occurrence", pattern.getFirstOccurrence());
-		assertNull("Invalid period", pattern.getPeriod());
-		assertNull("Invalid extension", pattern.getExtension());
+		assertEquals("Invalid period", Integer.valueOf(1), pattern.getPeriod());
+		assertEquals("Invalid extension", Integer.valueOf(0), pattern.getExtension());
 	}
 
 	@Test

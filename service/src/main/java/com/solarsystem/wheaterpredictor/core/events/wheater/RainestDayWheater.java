@@ -11,30 +11,23 @@ import com.solarsystem.wheaterpredictor.core.helpers.TriangleHelper;
 import com.solarsystem.wheaterpredictor.core.orbits.OrbitRelatedUniformEventPattern;
 import com.solarsystem.wheaterpredictor.core.orbits.PolarCoord.RectangularCoord;
 
-public class RainestDayWheater extends RelatedWheaterEventType {
+public final class RainestDayWheater extends RelatedWheaterEventType {
 
 	@Inject
 	private TriangleHelper triangleHelper;
 
 	private SortedMap<Integer, Collection<RectangularCoord>> patternCalculatorBuffer;
 
-	public RainestDayWheater(RainyWheater rainyWheater) {
-		patternCalculatorBuffer = new TreeMap<>();
-	}
-
 	private OrbitRelatedUniformEventPattern progressivePattern;
 
 	public RainestDayWheater() {
-		progressivePattern = null;
+		patternCalculatorBuffer = new TreeMap<>();
+		progressivePattern = new OrbitRelatedUniformEventPattern();
 	}
 
 	@Override
 	public String getName() {
 		return "Día más lluvioso de la temporada";
-	}
-
-	public TriangleHelper getTriangleHelper() {
-		return triangleHelper;
 	}
 
 	public void setTriangleHelper(TriangleHelper triangleHelper) {
@@ -66,8 +59,8 @@ public class RainestDayWheater extends RelatedWheaterEventType {
 				day -> perimetersByDay.put(triangleHelper.getPerimeter(patternCalculatorBuffer.get(day)), day));
 		Integer firstOccurrence = perimetersByDay.get(perimetersByDay.lastKey());
 		progressivePattern.setFirstOccurrence(firstOccurrence);
-		progressivePattern.setPeriod(period);
 		progressivePattern.setExtension(0);
+		progressivePattern.setPeriod(period);
 
 	}
 
