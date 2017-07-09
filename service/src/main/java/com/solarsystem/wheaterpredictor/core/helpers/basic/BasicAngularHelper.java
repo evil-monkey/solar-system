@@ -10,7 +10,8 @@ public class BasicAngularHelper implements AngularHelper {
 
 	@Override
 	public boolean areNotSameOrOppositeAzimuth(PolarCoord position1, PolarCoord position2) {
-		return position1.getAzimuth().equals(position2.getAzimuth())
-				|| Math.abs(position2.getAzimuth() - position1.getAzimuth()) == 180;
+		return position1.getRadius() == 0 || position2.getRadius() == 0
+				|| position1.getRelativeAzimuth() == position2.getRelativeAzimuth()
+				|| Math.abs(position2.getRelativeAzimuth() - position1.getRelativeAzimuth()) == 180;
 	}
 }

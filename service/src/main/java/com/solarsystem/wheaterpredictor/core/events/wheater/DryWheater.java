@@ -24,10 +24,6 @@ public final class DryWheater extends WheaterEventType {
 		return "Clima seco";
 	}
 
-	public AngularHelper getAngularHelper() {
-		return angularHelper;
-	}
-
 	public void setAngularHelper(AngularHelper angularHelper) {
 		this.angularHelper = angularHelper;
 	}
