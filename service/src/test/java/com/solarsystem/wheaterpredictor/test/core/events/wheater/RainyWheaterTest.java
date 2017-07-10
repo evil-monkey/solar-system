@@ -21,14 +21,14 @@ import com.solarsystem.wheaterpredictor.core.events.EventType;
 import com.solarsystem.wheaterpredictor.core.events.wheater.RainyWheater;
 import com.solarsystem.wheaterpredictor.core.events.wheater.RelatedWheaterEventType;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
-import com.solarsystem.wheaterpredictor.core.helpers.TriangleHelper;
+import com.solarsystem.wheaterpredictor.core.helpers.PolygonHelper;
 import com.solarsystem.wheaterpredictor.core.orbits.OrbitRelatedUniformEventPattern;
 import com.solarsystem.wheaterpredictor.core.orbits.PolarCoord.RectangularCoord;
 
 public class RainyWheaterTest extends WheaterEventTypeBaseTest {
 
 	@Mock
-	private TriangleHelper triangleHelper;
+	private PolygonHelper triangleHelper;
 
 	@InjectMocks
 	private RainyWheater eventType;
@@ -45,7 +45,7 @@ public class RainyWheaterTest extends WheaterEventTypeBaseTest {
 	public void basicNoOccurrenceTest() {
 		final AtomicInteger iterations = new AtomicInteger(0);
 		final Boolean[] occurrences = new Boolean[] { false, true, true, true, true, false, false, true };
-		Mockito.when(triangleHelper.isSunBetweenPlanets(Mockito.anyListOf(RectangularCoord.class),
+		Mockito.when(triangleHelper.isPointBetweenVertices(Mockito.anyListOf(RectangularCoord.class),
 				Mockito.any(RectangularCoord.class))).thenAnswer(new Answer<Boolean>() {
 
 					@Override
@@ -62,7 +62,7 @@ public class RainyWheaterTest extends WheaterEventTypeBaseTest {
 	public void basicOccurrenceTest() {
 		final AtomicInteger iterations = new AtomicInteger(0);
 		final Boolean[] occurrences = new Boolean[] { false, true, true, true, true, false, false, true };
-		Mockito.when(triangleHelper.isSunBetweenPlanets(Mockito.anyListOf(RectangularCoord.class),
+		Mockito.when(triangleHelper.isPointBetweenVertices(Mockito.anyListOf(RectangularCoord.class),
 				Mockito.any(RectangularCoord.class))).thenAnswer(new Answer<Boolean>() {
 
 					@Override
@@ -83,7 +83,7 @@ public class RainyWheaterTest extends WheaterEventTypeBaseTest {
 	public void getPatternTest() {
 		final AtomicInteger iterations = new AtomicInteger(0);
 		final Boolean[] occurrences = new Boolean[] { false, true, true, true, true, false, false, true };
-		Mockito.when(triangleHelper.isSunBetweenPlanets(Mockito.anyListOf(RectangularCoord.class),
+		Mockito.when(triangleHelper.isPointBetweenVertices(Mockito.anyListOf(RectangularCoord.class),
 				Mockito.any(RectangularCoord.class))).thenAnswer(new Answer<Boolean>() {
 
 					@Override
@@ -113,7 +113,7 @@ public class RainyWheaterTest extends WheaterEventTypeBaseTest {
 	public void cantObtainSecondOccurenceForPatternTest() throws Exception {
 		final AtomicInteger iterations = new AtomicInteger(0);
 		final Boolean[] occurrences = new Boolean[] { false, true, true, true, true, false, false, true };
-		Mockito.when(triangleHelper.isSunBetweenPlanets(Mockito.anyListOf(RectangularCoord.class),
+		Mockito.when(triangleHelper.isPointBetweenVertices(Mockito.anyListOf(RectangularCoord.class),
 				Mockito.any(RectangularCoord.class))).thenAnswer(new Answer<Boolean>() {
 
 					@Override
@@ -131,7 +131,7 @@ public class RainyWheaterTest extends WheaterEventTypeBaseTest {
 
 		final AtomicInteger iterations = new AtomicInteger(0);
 		final Boolean[] occurrences = new Boolean[] { false, true, true, true, true, false, false, true };
-		Mockito.when(triangleHelper.isSunBetweenPlanets(Mockito.anyListOf(RectangularCoord.class),
+		Mockito.when(triangleHelper.isPointBetweenVertices(Mockito.anyListOf(RectangularCoord.class),
 				Mockito.any(RectangularCoord.class))).thenAnswer(new Answer<Boolean>() {
 
 					@Override

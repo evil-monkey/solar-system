@@ -42,7 +42,7 @@ public class GoodWheaterTest extends WheaterEventTypeBaseTest {
 	@Test
 	public void basicNoOccurrenceTest() {
 		final AtomicInteger iterations = new AtomicInteger(0);
-		Mockito.when(rectHelper.allAreAlignedExceptByTheSun(Mockito.anyListOf(RectangularCoord.class),
+		Mockito.when(rectHelper.allAreAlignedExceptByThePoint(Mockito.anyListOf(RectangularCoord.class),
 				Mockito.any(RectangularCoord.class), Mockito.anyDouble())).thenAnswer(new Answer<Boolean>() {
 
 					@Override
@@ -58,7 +58,7 @@ public class GoodWheaterTest extends WheaterEventTypeBaseTest {
 	@Test
 	public void basicOccurrenceTest() {
 		final AtomicInteger iterations = new AtomicInteger(0);
-		Mockito.when(rectHelper.allAreAlignedExceptByTheSun(Mockito.anyListOf(RectangularCoord.class),
+		Mockito.when(rectHelper.allAreAlignedExceptByThePoint(Mockito.anyListOf(RectangularCoord.class),
 				Mockito.any(RectangularCoord.class), Mockito.anyDouble())).thenAnswer(new Answer<Boolean>() {
 
 					@Override
@@ -78,7 +78,7 @@ public class GoodWheaterTest extends WheaterEventTypeBaseTest {
 	@Test
 	public void getPatternTest() {
 		final AtomicInteger iterations = new AtomicInteger(0);
-		Mockito.when(rectHelper.allAreAlignedExceptByTheSun(Mockito.anyListOf(RectangularCoord.class),
+		Mockito.when(rectHelper.allAreAlignedExceptByThePoint(Mockito.anyListOf(RectangularCoord.class),
 				Mockito.any(RectangularCoord.class), Mockito.anyDouble())).thenAnswer(new Answer<Boolean>() {
 
 					@Override
@@ -107,7 +107,7 @@ public class GoodWheaterTest extends WheaterEventTypeBaseTest {
 	@Test(expected = PatternCalculationError.class)
 	public void cantObtainSecondOccurenceForPatternTest() throws Exception {
 		final AtomicInteger iterations = new AtomicInteger(0);
-		Mockito.when(rectHelper.allAreAlignedExceptByTheSun(Mockito.anyListOf(RectangularCoord.class),
+		Mockito.when(rectHelper.allAreAlignedExceptByThePoint(Mockito.anyListOf(RectangularCoord.class),
 				Mockito.any(RectangularCoord.class), Mockito.anyDouble())).thenAnswer(new Answer<Boolean>() {
 
 					@Override

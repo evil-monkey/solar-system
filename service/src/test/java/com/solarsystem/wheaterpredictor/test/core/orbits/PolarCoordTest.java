@@ -1,6 +1,8 @@
 package com.solarsystem.wheaterpredictor.test.core.orbits;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -152,6 +154,31 @@ public class PolarCoordTest {
 		RectangularCoord rc = new RectangularCoord(10.0d, 30.0d);
 		assertEquals("Wrong representation.", "r(10.0, 30.0)", rc.toString());
 
+	}
+
+	@Test
+	public void rectangularCoordEqualsTest() throws Exception {
+
+		RectangularCoord coord0 = new RectangularCoord(1.0d, 1.0d);
+
+		assertFalse("Coord can't be equals to null", coord0.equals(null));
+		assertFalse("Coord can't be equals to other type of object", coord0.equals(Integer.valueOf(1)));
+
+		RectangularCoord coord1 = new RectangularCoord(1.0d, 0.0d);
+		assertFalse("Coord aren't equals", coord0.equals(coord1));
+		
+		coord1 = new RectangularCoord(null, 1.0d);
+		assertFalse("Coord aren't equals", coord1.equals(coord0));
+		
+		coord1 = new RectangularCoord(1.0d, null);
+		assertFalse("Coord aren't equals", coord1.equals(coord0));
+		
+		coord1 = new RectangularCoord(null, null);
+		assertFalse("Coord aren't equals", coord1.equals(coord0));
+		
+		coord1 = new RectangularCoord(0.0d, 1.0d);
+		assertFalse("Coord aren't equals", coord0.equals(coord1));
+		
 	}
 
 }

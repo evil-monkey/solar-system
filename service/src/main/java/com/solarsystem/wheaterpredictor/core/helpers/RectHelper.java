@@ -6,6 +6,6 @@ import com.solarsystem.wheaterpredictor.core.orbits.PolarCoord.RectangularCoord;
 
 public interface RectHelper {
 
-	boolean allAreAlignedExceptByTheSun(List<RectangularCoord> positions, RectangularCoord sun, Double tolerance);
+	boolean allAreAlignedExceptByThePoint(List<RectangularCoord> positions, RectangularCoord point, Double tolerance);
 
 }

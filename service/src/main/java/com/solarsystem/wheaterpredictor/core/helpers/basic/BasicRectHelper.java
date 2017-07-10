@@ -17,7 +17,7 @@ public class BasicRectHelper implements RectHelper {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BasicRectHelper.class);
 
 	@Override
-	public boolean allAreAlignedExceptByTheSun(List<RectangularCoord> positions, RectangularCoord sun,
+	public boolean allAreAlignedExceptByThePoint(List<RectangularCoord> positions, RectangularCoord sun,
 			Double tolerance) {
 
 		if (positions.size() < 3) {

@@ -7,14 +7,14 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
-import com.solarsystem.wheaterpredictor.core.helpers.TriangleHelper;
+import com.solarsystem.wheaterpredictor.core.helpers.PolygonHelper;
 import com.solarsystem.wheaterpredictor.core.orbits.OrbitRelatedUniformEventPattern;
 import com.solarsystem.wheaterpredictor.core.orbits.PolarCoord.RectangularCoord;
 
 public final class RainyWheater extends WheaterEventType {
 
 	@Inject
-	private TriangleHelper triangleHelper;
+	private PolygonHelper polygonHelper;
 
 	@Override
 	public String getName() {
@@ -41,7 +41,7 @@ public final class RainyWheater extends WheaterEventType {
 					this.getOrbits().stream().map(orbit -> orbit.calculatePosition(predictionDay).getRectangularCoord())
 							.collect(Collectors.toSet()));
 
-			if (triangleHelper.isSunBetweenPlanets(positions, sunPosition)) {
+			if (polygonHelper.isPointBetweenVertices(positions, sunPosition)) {
 				// solo cuenta para la primera, asume q la segunda tiene la
 				// misma extensión
 				if (count) {

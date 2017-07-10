@@ -46,7 +46,7 @@ public final class GoodWheater extends WheaterEventType {
 					this.getOrbits().stream().map(orbit -> orbit.calculatePosition(predictionDay).getRectangularCoord())
 							.collect(Collectors.toSet()));
 
-			if (rectHelper.allAreAlignedExceptByTheSun(positions, sun, tolerance)) {
+			if (rectHelper.allAreAlignedExceptByThePoint(positions, sun, tolerance)) {
 				if (firstOccurrence == null) {
 					firstOccurrence = predictionDay;
 				} else {

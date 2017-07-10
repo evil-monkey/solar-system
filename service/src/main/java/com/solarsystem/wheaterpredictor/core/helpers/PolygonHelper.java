@@ -5,9 +5,9 @@ import java.util.List;
 
 import com.solarsystem.wheaterpredictor.core.orbits.PolarCoord.RectangularCoord;
 
-public interface TriangleHelper {
+public interface PolygonHelper {
 
-	boolean isSunBetweenPlanets(List<RectangularCoord> positions, RectangularCoord sunPosition);
+	boolean isPointBetweenVertices(List<RectangularCoord> positions, RectangularCoord point);
 
 	Double getPerimeter(Collection<RectangularCoord> vertices);
 

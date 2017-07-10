@@ -14,9 +14,7 @@ public class WheaterPredictor implements Predictor {
 	@Override
 	public Collection<EventType> predict(Integer day) {
 
-		// TODO: hacerlo en paralelo
-
-		Collection<EventType> events = eventTypes.stream().map(event -> event.occurs(day))
+		Collection<EventType> events = eventTypes.parallelStream().map(event -> event.occurs(day))
 				.filter(event -> event != null).flatMap(listContainer -> listContainer.stream())
 				.collect(Collectors.toSet());
 

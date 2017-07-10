@@ -20,14 +20,14 @@ import org.mockito.stubbing.Answer;
 import com.solarsystem.wheaterpredictor.core.events.EventType;
 import com.solarsystem.wheaterpredictor.core.events.wheater.RainestDayWheater;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
-import com.solarsystem.wheaterpredictor.core.helpers.TriangleHelper;
+import com.solarsystem.wheaterpredictor.core.helpers.PolygonHelper;
 import com.solarsystem.wheaterpredictor.core.orbits.OrbitRelatedUniformEventPattern;
 import com.solarsystem.wheaterpredictor.core.orbits.PolarCoord.RectangularCoord;
 
 public class RainestDayWheaterTest extends WheaterEventTypeBaseTest {
 
 	@Mock
-	private TriangleHelper triangleHelper;
+	private PolygonHelper triangleHelper;
 
 	@InjectMocks
 	private RainestDayWheater eventType;

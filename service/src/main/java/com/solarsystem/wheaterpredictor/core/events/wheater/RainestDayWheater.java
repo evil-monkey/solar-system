@@ -7,14 +7,14 @@ import java.util.TreeMap;
 import javax.inject.Inject;
 
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
-import com.solarsystem.wheaterpredictor.core.helpers.TriangleHelper;
+import com.solarsystem.wheaterpredictor.core.helpers.PolygonHelper;
 import com.solarsystem.wheaterpredictor.core.orbits.OrbitRelatedUniformEventPattern;
 import com.solarsystem.wheaterpredictor.core.orbits.PolarCoord.RectangularCoord;
 
 public final class RainestDayWheater extends RelatedWheaterEventType {
 
 	@Inject
-	private TriangleHelper triangleHelper;
+	private PolygonHelper polygonHelper;
 
 	private SortedMap<Integer, Collection<RectangularCoord>> patternCalculatorBuffer;
 
@@ -28,10 +28,6 @@ public final class RainestDayWheater extends RelatedWheaterEventType {
 	@Override
 	public String getName() {
 		return "Día más lluvioso de la temporada";
-	}
-
-	public void setTriangleHelper(TriangleHelper triangleHelper) {
-		this.triangleHelper = triangleHelper;
 	}
 
 	@Override
@@ -56,7 +52,7 @@ public final class RainestDayWheater extends RelatedWheaterEventType {
 		SortedMap<Double, Integer> perimetersByDay = new TreeMap<>();
 
 		patternCalculatorBuffer.keySet().forEach(
-				day -> perimetersByDay.put(triangleHelper.getPerimeter(patternCalculatorBuffer.get(day)), day));
+				day -> perimetersByDay.put(polygonHelper.getPerimeter(patternCalculatorBuffer.get(day)), day));
 		Integer firstOccurrence = perimetersByDay.get(perimetersByDay.lastKey());
 		progressivePattern.setFirstOccurrence(firstOccurrence);
 		progressivePattern.setExtension(0);

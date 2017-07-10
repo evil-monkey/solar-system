@@ -36,6 +36,22 @@ public final class PolarCoord {
 		public String toString() {
 			return new StringBuilder("r(").append(this.x).append(", ").append(this.y).append(")").toString();
 		}
+
+		@Override
+		public int hashCode() {
+			return Double.valueOf(this.x * 1000 + this.y).intValue();
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			boolean result = obj != null && obj instanceof RectangularCoord;
+			if (result) {
+				RectangularCoord other = (RectangularCoord) obj;
+				result = this.getX() != null && this.getX().equals(other.getX()) && this.getY() != null
+						&& this.getY().equals(other.getY());
+			}
+			return result;
+		}
 	}
 
 	private Integer azimuth;
