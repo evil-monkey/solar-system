@@ -27,24 +27,29 @@ public class TriangleBasicHelper implements PolygonHelper {
 
 		int mainOrientation = getTriangleOrientation(positions);
 
-		boolean result = false;
+		boolean result = getTriangleArea(positions) > 0.0d;
 
-		// A1A2P, A2A3P, A3A1P
-		List<RectangularCoord> st = Lists.newArrayList(positions);
-		st.set(2, point);
-		if (mainOrientation * getTriangleOrientation(st) > 0) {
-			st = new ArrayList<>(3);
-			st.add(positions.get(1));
-			st.add(positions.get(2));
-			st.add(point);
+		if (result) {
+			result = false;
+			// A1A2P, A2A3P, A3A1P
+			List<RectangularCoord> st = Lists.newArrayList(positions);
+			st.set(2, point);
 			if (mainOrientation * getTriangleOrientation(st) > 0) {
 				st = new ArrayList<>(3);
+				st.add(positions.get(1));
 				st.add(positions.get(2));
-				st.add(positions.get(0));
 				st.add(point);
+				if (mainOrientation * getTriangleOrientation(st) > 0) {
+					st = new ArrayList<>(3);
+					st.add(positions.get(2));
+					st.add(positions.get(0));
+					st.add(point);
 
-				result = mainOrientation * getTriangleOrientation(st) > 0;
+					result = mainOrientation * getTriangleOrientation(st) > 0;
+				}
 			}
+		} else {
+			LOGGER.debug("Triangle is collapsed!");
 		}
 
 		return result;
@@ -62,6 +67,7 @@ public class TriangleBasicHelper implements PolygonHelper {
 			LOGGER.warn("Can't draw a triangle with these positions!");
 			throw new PatternCalculationError("Can't draw a triangle with these positions!");
 		}
+
 	}
 
 	@Override
@@ -79,7 +85,7 @@ public class TriangleBasicHelper implements PolygonHelper {
 		double side1 = (Math.sqrt(Math.pow(p2.getX() - p1.getX(), 2) + (Math.pow(p2.getY() - p1.getY(), 2))));
 		double side2 = (Math.sqrt(Math.pow(p3.getX() - p2.getX(), 2) + (Math.pow(p3.getY() - p2.getY(), 2))));
 		double side3 = (Math.sqrt(Math.pow(p3.getX() - p1.getX(), 2) + (Math.pow(p3.getY() - p1.getY(), 2))));
-		
+
 		return side1 + side2 + side3;
 	}
 
@@ -88,5 +94,17 @@ public class TriangleBasicHelper implements PolygonHelper {
 		return (vertices.get(0).getX() - vertices.get(2).getX()) * (vertices.get(1).getY() - vertices.get(2).getY())
 				- (vertices.get(0).getY() - vertices.get(2).getY())
 						* (vertices.get(1).getX() - vertices.get(2).getX()) >= 0 ? 1 : -1;
+	}
+
+	private double getTriangleArea(Collection<RectangularCoord> vertices) {
+
+		List<RectangularCoord> v = new ArrayList<>(vertices);
+
+		RectangularCoord p1 = v.get(0);
+		RectangularCoord p2 = v.get(1);
+		RectangularCoord p3 = v.get(2);
+		return Math.abs(
+				(p1.getX() - p3.getX()) * (p2.getY() - p1.getY()) - (p1.getX() - p2.getX()) * (p3.getY() - p1.getY()))
+				* 0.5;
 	}
 }

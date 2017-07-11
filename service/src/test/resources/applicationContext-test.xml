@@ -23,14 +23,15 @@
 		</property>
 	</bean>
 
-	<!-- orbits -->
+<!-- orbits -->
 
 	<bean name="ferengi" scope="prototype"
 		class="com.solarsystem.wheaterpredictor.core.orbits.CircularOrbit">
 		<property name="name" value="Ferengi" />
 		<property name="angularSpeed" value="1" />
 		<property name="initialPosition">
-			<bean class="com.solarsystem.wheaterpredictor.core.orbits.PolarCoord">
+			<bean class="com.solarsystem.wheaterpredictor.core.orbits.PolarCoord"
+				scope="prototype">
 				<property name="radius" value="500" />
 				<property name="azimuth" value="0" />
 			</bean>
@@ -41,7 +42,8 @@
 		<property name="name" value="Betasoide" />
 		<property name="angularSpeed" value="3" />
 		<property name="initialPosition">
-			<bean class="com.solarsystem.wheaterpredictor.core.orbits.PolarCoord">
+			<bean class="com.solarsystem.wheaterpredictor.core.orbits.PolarCoord"
+				scope="prototype">
 				<property name="radius" value="2000" />
 				<property name="azimuth" value="0" />
 			</bean>
@@ -52,7 +54,8 @@
 		<property name="name" value="Vulcano" />
 		<property name="angularSpeed" value="-5" />
 		<property name="initialPosition">
-			<bean class="com.solarsystem.wheaterpredictor.core.orbits.PolarCoord">
+			<bean class="com.solarsystem.wheaterpredictor.core.orbits.PolarCoord"
+				scope="prototype">
 				<property name="radius" value="1000" />
 				<property name="azimuth" value="0" />
 			</bean>
@@ -107,7 +110,7 @@
 			<list>
 				<ref bean="dryWheatherEventType" />
 				<ref bean="rainyWheatherEventType" />
-				<ref bean="goodWheatherEventType" />
+				<ref bean="goodWheatherEventType" /> 
 			</list>
 		</property>
 	</bean>

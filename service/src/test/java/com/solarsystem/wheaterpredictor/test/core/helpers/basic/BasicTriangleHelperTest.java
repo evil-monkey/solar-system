@@ -142,6 +142,15 @@ public class BasicTriangleHelperTest {
 	}
 
 	@Test
+	public void set1Test() throws Exception {
+		List<RectangularCoord> coords = new LinkedList<>();
+		coords.add(new RectangularCoord(500.0d, 0.0d));
+		coords.add(new RectangularCoord(2000.0d, 0.0d));
+		coords.add(new RectangularCoord(1000.0d, 0.0d));
+		assertFalse("Invalid result", helper.isPointBetweenVertices(coords, new RectangularCoord(0.0d, 0.0d)));
+	}
+
+	@Test
 	public void getPerimeter() throws Exception {
 		List<RectangularCoord> coords = new LinkedList<>();
 		coords.add(new RectangularCoord(0.0d, 1.0d));
