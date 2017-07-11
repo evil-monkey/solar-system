@@ -220,8 +220,6 @@
 				<version>${plugins.jacoco.version}</version>
 				<configuration>
 					<excludes>
-						<exclude>**/service/*</exclude>
-						<exclude>**/api/*</exclude>
 					</excludes>
 				</configuration>
 				<executions>
