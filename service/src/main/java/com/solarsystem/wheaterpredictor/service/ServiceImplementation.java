@@ -15,7 +15,6 @@ import com.solarsystem.wheaterpredictor.api.ServiceApi;
 import com.solarsystem.wheaterpredictor.api.dto.HealthCheckResponse;
 import com.solarsystem.wheaterpredictor.api.dto.WheaterStatus;
 import com.solarsystem.wheaterpredictor.core.WheaterPredictor;
-import com.solarsystem.wheaterpredictor.core.events.EventType;
 import com.solarsystem.wheaterpredictor.core.exceptions.PatternCalculationError;
 import com.solarsystem.wheaterpredictor.service.exceptions.InvalidDataException;
 import com.solarsystem.wheaterpredictor.service.exceptions.WheaterPredictorException;
@@ -68,7 +67,7 @@ public class ServiceImplementation implements ServiceApi {
 
 		try {
 			WheaterStatus wheaterStatus = new WheaterStatus();
-			wheaterStatus.setDay(1);
+			wheaterStatus.setDia(day);
 			Collection<String> events = wheaterPredictor.predict(day).stream().map(eventType -> eventType.getName())
 					.collect(Collectors.toSet());
 			wheaterStatus.setClima(String.join(", ", events));
@@ -76,7 +75,7 @@ public class ServiceImplementation implements ServiceApi {
 
 		} catch (PatternCalculationError pce) {
 			throw new WheaterPredictorException("Can't obtain wheater patterns: " + pce.getMessage());
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new WheaterPredictorException("Error: " + e.getMessage());
 		}
 	}

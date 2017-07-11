@@ -11,16 +11,7 @@ public class WheaterPredictorException extends WebApplicationException {
 	 */
 	private static final long serialVersionUID = -7483280955119362865L;
 
-	public WheaterPredictorException(Exception e) {
-            super(Response
-                            .status(Response.Status.INTERNAL_SERVER_ERROR)
-                            .entity(ExceptionMessageBuilder.getInstance()
-                                            .status(500).addField("error", e).build())
-                            .type(MediaType.APPLICATION_JSON_TYPE).build());
-
-    }   
-
-    public WheaterPredictorException(String message) {
+	public WheaterPredictorException(String message) {
             super(Response
                             .status(Response.Status.INTERNAL_SERVER_ERROR)
                             .entity(ExceptionMessageBuilder.getInstance()

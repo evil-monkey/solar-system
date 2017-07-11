@@ -9,15 +9,15 @@ public class WheaterStatus implements Serializable {
 	 */
 	private static final long serialVersionUID = -7333317650513679717L;
 
-	private Integer day;
+	private Integer dia;
 	private String clima;
 
-	public Integer getDay() {
-		return day;
+	public Integer getDia() {
+		return dia;
 	}
 
-	public void setDay(Integer day) {
-		this.day = day;
+	public void setDia(Integer day) {
+		this.dia = day;
 	}
 
 	public String getClima() {

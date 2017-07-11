@@ -27,10 +27,5 @@ public class ExceptionMessageBuilder {
 		message.put("status", value);
 		return this;
 	}
-
-	public ExceptionMessageBuilder message(String message) {
-		this.message.put("message", message);
-		return this;
-	}
-
+	
 }
