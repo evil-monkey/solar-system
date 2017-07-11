@@ -1,6 +1,6 @@
 # Ejercicio Sistema Solar
 
-##General
+## General
 
 Se planteó una entidad **WheaterPredictor** (que implementa **Predictor**) que para un determinado día devuelve una colección de eventos que suceden dicho día. A **WheaterPredictor** es posible agregarle una colección de eventos del tipo clima, **WheaterEventType** que serán consulados para comprobar su ocurrencia en un día específico. **WheaterEventType** calcula su propia ocurrencia a partir de la posición de los planetas modelados en un conjunto de orbitas circulares **CircularOrbit**. La posición se calcula primero obteniendo un patrón **OrbitRelatedUniformEventPattern** al que luego se le consulta para saber si ocurre en el día de interés. El patrón se calcula siempre una sola vez y luego sólo se consulta (este mecanismo es bastante simple y en este caso particular de órbitas circulares con velocidad constante permite evitar utlizar mecanismos de cacheo - podrían implementarse con @Cacheable , pero no me pareción necesario para el scope del ejercicio).
 Los cálculos geométricos se basan en tres interfaces Helpers, una orientado a cálculo angular *AngularHelper*, otra en geometría de triángulos *TriangleHelp* y otra en cálculos sobre rectas *RectHelper*. Las tres se implementaron luego con algoritmos básicos, pero al componer los **WheaterEventType** a través de las interfaces permiten un fácil reemplazo por algoritmos mejorados.
