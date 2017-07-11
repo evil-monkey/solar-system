@@ -1,11 +1,9 @@
 package com.solarsystem.wheaterpredictor.test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.junit.Before;
@@ -41,7 +39,6 @@ public class WheaterPredictorTest {
 
 		WheaterEventType eventType2 = Mockito.mock(WheaterEventType.class);
 		Mockito.when(eventType2.getName()).thenReturn("event2");
-		List<EventType> response2 = Arrays.asList(new EventType[] { eventType2 });
 		EventType subevent1 = Mockito.mock(EventType.class);
 		Mockito.when(subevent1.getName()).thenReturn("subevent1");
 		Mockito.when(eventType2.occurs(Mockito.anyInt())).thenAnswer(new Answer<Collection<EventType>>() {

@@ -10,7 +10,8 @@
 	<context:annotation-config />
 
 	<context:component-scan base-package="com.solarsystem.wheaterpredictor" />
-	<context:component-scan base-package="com.solarsystem.wheaterpredictor.web.providers" />
+	<context:component-scan
+		base-package="com.solarsystem.wheaterpredictor.web.providers" />
 	<context:component-scan base-package="com.solarsystem.wheaterpredictor.service" />
 
 	<import resource="classpath*:applicationContext-test-*.xml" />
@@ -22,5 +23,93 @@
 		</property>
 	</bean>
 
+	<!-- orbits -->
+
+	<bean name="ferengi" scope="prototype"
+		class="com.solarsystem.wheaterpredictor.core.orbits.CircularOrbit">
+		<property name="name" value="Ferengi" />
+		<property name="angularSpeed" value="1" />
+		<property name="initialPosition">
+			<bean class="com.solarsystem.wheaterpredictor.core.orbits.PolarCoord">
+				<property name="radius" value="500" />
+				<property name="azimuth" value="0" />
+			</bean>
+		</property>
+	</bean>
+	<bean name="betasoide" scope="prototype"
+		class="com.solarsystem.wheaterpredictor.core.orbits.CircularOrbit">
+		<property name="name" value="Betasoide" />
+		<property name="angularSpeed" value="3" />
+		<property name="initialPosition">
+			<bean class="com.solarsystem.wheaterpredictor.core.orbits.PolarCoord">
+				<property name="radius" value="2000" />
+				<property name="azimuth" value="0" />
+			</bean>
+		</property>
+	</bean>
+	<bean name="vulcano" scope="prototype"
+		class="com.solarsystem.wheaterpredictor.core.orbits.CircularOrbit">
+		<property name="name" value="Vulcano" />
+		<property name="angularSpeed" value="-5" />
+		<property name="initialPosition">
+			<bean class="com.solarsystem.wheaterpredictor.core.orbits.PolarCoord">
+				<property name="radius" value="1000" />
+				<property name="azimuth" value="0" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- events -->
+
+	<bean id="dryWheatherEventType"
+		class="com.solarsystem.wheaterpredictor.core.events.wheater.DryWheater">
+		<property name="orbits">
+			<list>
+				<ref bean="ferengi" />
+				<ref bean="betasoide" />
+				<ref bean="vulcano" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="rainyWheatherEventType"
+		class="com.solarsystem.wheaterpredictor.core.events.wheater.RainyWheater">
+		<property name="orbits">
+			<list>
+				<ref bean="ferengi" />
+				<ref bean="betasoide" />
+				<ref bean="vulcano" />
+			</list>
+		</property>
+		<property name="relatedEventTypes">
+			<list>
+				<bean
+					class="com.solarsystem.wheaterpredictor.core.events.wheater.RainestDayWheater" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="goodWheatherEventType"
+		class="com.solarsystem.wheaterpredictor.core.events.wheater.GoodWheater">
+		<property name="orbits">
+			<list>
+				<ref bean="ferengi" />
+				<ref bean="betasoide" />
+				<ref bean="vulcano" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- predictor -->
+
+	<bean class="com.solarsystem.wheaterpredictor.core.WheaterPredictor">
+		<property name="eventTypes">
+			<list>
+				<ref bean="dryWheatherEventType" />
+				<ref bean="rainyWheatherEventType" />
+				<ref bean="goodWheatherEventType" />
+			</list>
+		</property>
+	</bean>
 
 </beans>

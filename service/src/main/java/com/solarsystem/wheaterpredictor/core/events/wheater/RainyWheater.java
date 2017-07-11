@@ -18,7 +18,7 @@ public final class RainyWheater extends WheaterEventType {
 
 	@Override
 	public String getName() {
-		return "Clima lluvioso";
+		return "Lluvia";
 	}
 
 	@Override
