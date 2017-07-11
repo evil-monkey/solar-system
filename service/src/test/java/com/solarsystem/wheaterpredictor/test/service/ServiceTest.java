@@ -1,8 +1,12 @@
 package com.solarsystem.wheaterpredictor.test.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -109,6 +113,52 @@ public class ServiceTest {
 	public void versionTest() throws Exception {
 		Object version = service.getVersion();
 		assertNotNull("Invalid version", version);
+	}
+
+	@Test(expected = InvalidDataException.class)
+	public void wideBulkTest1() throws Exception {
+		service.getPeriodWheaterStatus(-30000, 3, false);
+	}
+
+	@Test(expected = InvalidDataException.class)
+	public void wideBulkTest2() throws Exception {
+		service.getPeriodWheaterStatus(30000, 3, false);
+	}
+
+	@Test(expected = InvalidDataException.class)
+	public void wideBulkTest3() throws Exception {
+		service.getPeriodWheaterStatus(-3, 30000, false);
+	}
+
+	@Test(expected = InvalidDataException.class)
+	public void wideBulkTest4() throws Exception {
+		service.getPeriodWheaterStatus(2, -3333333, false);
+	}
+
+	@Test(expected = InvalidDataException.class)
+	public void wideBulkTest5() throws Exception {
+		service.getPeriodWheaterStatus(null, 30000, false);
+	}
+
+	@Test(expected = InvalidDataException.class)
+	public void wideBulkTest6() throws Exception {
+		service.getPeriodWheaterStatus(2, null, false);
+	}
+
+	@Test(expected = InvalidDataException.class)
+	public void wideBulkTest7() throws Exception {
+		service.getPeriodWheaterStatus(null, null, false);
+	}
+
+	@Test
+	public void sortedBulkTest() throws Exception {
+		Collection<WheaterStatus> result = service.getPeriodWheaterStatus(0, 3600, true);
+		assertNotNull("Invalid bulk data", result);
+		ArrayList<WheaterStatus> bulk = new ArrayList<>(result);
+		assertEquals("Invalid bulk #", 3600, bulk.size());
+		assertEquals("Invalid firstElement", Integer.valueOf(0), bulk.get(0).getDia());
+		assertEquals("Invalid lastElement", Integer.valueOf(3599), bulk.get(bulk.size() - 1).getDia());
+
 	}
 
 }

@@ -2,8 +2,10 @@ package com.solarsystem.wheaterpredictor.service;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 
@@ -78,6 +80,26 @@ public class ServiceImplementation implements ServiceApi {
 		} catch (RuntimeException e) {
 			throw new WheaterPredictorException("Error: " + e.getMessage());
 		}
+	}
+
+	@Override
+	public Collection<WheaterStatus> getPeriodWheaterStatus(Integer from, Integer to, Boolean sorted) {
+		if (from == null || to == null) {
+			throw new InvalidDataException("Define from and to days!");
+		}
+
+		if (Math.abs(from) > 20000 || Math.abs(to) > 20000) {
+			throw new InvalidDataException("Out of range |from|,|to| < 20000!");
+		}
+
+		List<WheaterStatus> bulk = IntStream.range(from, to).parallel().mapToObj(i -> (this.getWheaterStatus(i)))
+				.collect(Collectors.toList());
+
+		if (sorted) {
+			bulk.sort(WheaterStatus.comparator);
+		}
+
+		return bulk;
 	}
 
 }

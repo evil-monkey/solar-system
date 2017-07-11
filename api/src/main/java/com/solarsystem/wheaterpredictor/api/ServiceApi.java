@@ -1,6 +1,9 @@
 package com.solarsystem.wheaterpredictor.api;
 
+import java.util.Collection;
+
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -52,5 +55,14 @@ public interface ServiceApi {
 	@GET
 	@Path("/clima")
 	public WheaterStatus getWheaterStatus(@QueryParam("dia") Integer day);
+
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Bad Request"),
+			@ApiResponse(code = 500, message = "Internal error") })
+	@ApiOperation(value = "Get wheater prediction for a period")
+	@GET
+	@Path("/clima/bulk")
+	public Collection<WheaterStatus> getPeriodWheaterStatus(@DefaultValue("0") @QueryParam("desde") Integer from,
+			@DefaultValue("3700") @QueryParam("hasta") Integer to,
+			@DefaultValue("false") @QueryParam("sorted") Boolean sorted);
 
 }
